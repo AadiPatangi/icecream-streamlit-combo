@@ -6,7 +6,7 @@ import os
 
 
 #WORk_DIR = '/workspaces/icecream-streamlit-combo/work'
-WORk_DIR = "https://github.com/AadiPatangi/icecream-streamlit-combo/tree/main/work"
+WORk_DIR = "work"
 LABELS   = ['Ben & Jerry\'s','Breyer\'s','Häagen-Dazs','Talenti']
 IMG_SIZE = 32
 
