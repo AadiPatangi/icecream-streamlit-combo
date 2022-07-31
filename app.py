@@ -1,43 +1,85 @@
 import streamlit as st
-from PIL import Image
 import keras
 import cv2 as cv
 import numpy as np
-import matplotlib.pyplot as plt
+import os
+
+
+WORk_DIR = '/workspaces/icecream-streamlit-combo/work'
+LABELS   = ['Ben & Jerry\'s','Breyer\'s','Häagen-Dazs','Talenti']
+IMG_SIZE = 32
+
+
+def get_image_label(img_local_full_path):
+ 
+    # read image from local to server binary (array format)
+    img_arr = cv.imread(img_local_full_path)[...,::-1] #convert BGR to RGB format
+
+    # image prep for model input
+    IMG_HEIGHT = IMG_SIZE
+    IMG_WIDTH  = IMG_SIZE
+
+    resized_img_arr = cv.resize(img_arr, (IMG_HEIGHT, IMG_WIDTH)) # Reshaping images to preferred size
+    
+    flatten_image = resized_img_arr.reshape(-1, IMG_HEIGHT*IMG_WIDTH*3)
+    
+    # reshape/flatten input array for model input
+    reshape_dim = (-1, 32, 32, 3)
+    flatten_image = flatten_image.reshape(reshape_dim)
+    
+    # pre trained model to use
+    modelname = '/workspaces/icecream-streamlit-combo/modelz/icecream'
+    
+    # load the model
+    trained_model = keras.models.load_model(modelname)
+    
+    # predict image label index
+    pred_dist = trained_model.predict(flatten_image)
+    pred_index = np.argmax(pred_dist[0])
+    
+    # predicted label 
+    label = LABELS[pred_index]
+    
+    return label
+
+
+#
+#
+#  Capture and Process the input
+#
+#
 
 st.title("Iscream or NotCream")
-st.header("By: Aadi Patangi")
-st.markdown("## This project was made as a submission for FreyHacks[https://devpost.com/software/iscream-r16m7a]. We expanded upon it by adding a web app")
-image = st.file_uploader("Upload an image: ",type=["png","jpg"])
-image = Image.open(image)
-st.image(image, caption='Uploaded File')
-modelname = '/workspaces/icecream-streamlit-combo/modelz/icecream'
-#model.save(modelname,save_format='h5')
+st.markdown("## By: [Aadi Patangi](https://github.com/AadiPatangi)")
+image_file = st.file_uploader("Upload an image: ",type=["png","jpg"])
 
-trained_model = keras.models.load_model(modelname)
-IMG_SIZE = 32
-LABELS = ['bj','breyers','hd','talenti']
-IMG_HEIGHT = IMG_SIZE
-IMG_WIDTH  = IMG_SIZE
+if image_file:
+    #st.markdown('Upload complete!')
+    # Hide filename on UI
+    st.markdown('''
+        <style>
+            .uploadedFile {display: none}
+        <style>''',
+        unsafe_allow_html=True)
 
-#imgx = '/workspaces/icecream-streamlit-combo/projdata/testss/breyers/10_breyers.png'
 
-img_arr = cv.imread(image)[...,::-1] #convert BGR to RGB format
+image_full_path = None
+#
+#Write input image to local server dir (WORK_DIR)
+if image_file is not None:
+    #
+    image_full_path = os.path.join(WORk_DIR,image_file.name)
+    with open(image_full_path,"wb") as f:
+        f.write(image_file.getbuffer())
 
-resized_arr = cv.resize(img_arr, (IMG_HEIGHT, IMG_WIDTH)) # Reshaping images to preferred size
-img_to_predict = resized_arr
-
-flatten_image = img_to_predict.reshape(-1, IMG_HEIGHT*IMG_WIDTH*3)
-
-res = batch_input_shape=(-1, 32, 32, 3)
-
-flatten_image = flatten_image.reshape(res)
-pred_dist = trained_model.predict(flatten_image)
-
-pred_index = np.argmax(pred_dist[0])
-pred_label = LABELS[pred_index]
-data = np.asarray(img_arr)
-
-imgplot = plt.imshow(data)
-plt.title(pred_label)
-st.image(image,caption=pred_label)
+# Process file stored to WORK_DIR
+if image_full_path is not None:
+    
+    pred_label = get_image_label(image_full_path)
+    
+    if os.path.exists(image_full_path):
+        os.remove(image_full_path)
+    #
+    st.header("Uploaded: "+pred_label)
+    st.image(image_file,caption=None)
+    
