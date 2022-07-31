@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 st.title("Iscream or NotCream")
 st.header("By: Aadi Patangi")
+st.markdown("## This project was made as a submission for FreyHacks[https://devpost.com/software/iscream-r16m7a]. We expanded upon it by adding a web app")
 image = st.file_uploader("Upload an image: ",type=["png","jpg"])
 image = Image.open(image)
 st.image(image, caption='Uploaded File')
@@ -19,9 +20,10 @@ LABELS = ['bj','breyers','hd','talenti']
 IMG_HEIGHT = IMG_SIZE
 IMG_WIDTH  = IMG_SIZE
 
-imgx = '/workspaces/icecream-streamlit-combo/projdata/testss/breyers/10_breyers.png'
+#imgx = '/workspaces/icecream-streamlit-combo/projdata/testss/breyers/10_breyers.png'
 
-img_arr = cv.imread(imgx)[...,::-1] #convert BGR to RGB format
+img_arr = cv.imread(image)[...,::-1] #convert BGR to RGB format
+
 resized_arr = cv.resize(img_arr, (IMG_HEIGHT, IMG_WIDTH)) # Reshaping images to preferred size
 img_to_predict = resized_arr
 
