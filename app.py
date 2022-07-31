@@ -29,7 +29,7 @@ def get_image_label(img_local_full_path):
     flatten_image = flatten_image.reshape(reshape_dim)
     
     # pre trained model to use
-    modelname = '/workspaces/icecream-streamlit-combo/modelz/icecream'
+    modelname = '/workspaces/icecream-streamlit-combo/modelz/icecream/'
     
     # load the model
     trained_model = keras.models.load_model(modelname)
