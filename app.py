@@ -50,7 +50,7 @@ def get_image_label(img_local_full_path):
 #
 #
 
-st.markdown("## [Iscream or NotCream](https://github.com/AadiPatangi/icecream-streamlit-combo)")
+st.markdown("# [Iscream or NotCream](https://github.com/AadiPatangi/icecream-streamlit-combo)")
 st.markdown("### By: Aadi Patangi")
 image_file = st.file_uploader("Upload an image: ",type=["png","jpg"])
 
@@ -83,4 +83,15 @@ if image_full_path is not None:
     #
     st.header("Uploaded: "+pred_label)
     st.image(image_file,caption=None)
-    
+st.markdown("The image was fed through a convolutional neural network which consisted of a sequential model and 3 layers. The code is below: ")
+code = ''' def make_model():
+      model = keras.Sequential([
+         keras.layers.Flatten(input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
+         keras.layers.Dense(512, activation='relu'),
+         keras.layers.Dense(4)
+      ])
+      model.compile(optimizer='adam',
+                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                   metrics=['accuracy'])
+      return model '''
+st.code(code,language="python")
