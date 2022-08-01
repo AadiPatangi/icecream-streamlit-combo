@@ -50,8 +50,8 @@ def get_image_label(img_local_full_path):
 #
 #
 
-st.title("Iscream or NotCream")
-st.markdown("## By: [Aadi Patangi](https://github.com/AadiPatangi)")
+st.markdown("## [Iscream or NotCream](https://github.com/AadiPatangi/icecream-streamlit-combo)")
+st.markdown("### By: Aadi Patangi")
 image_file = st.file_uploader("Upload an image: ",type=["png","jpg"])
 
 if image_file:
