@@ -52,7 +52,7 @@ def get_image_label(img_local_full_path):
 
 st.markdown("# [Iscream or NotCream](https://github.com/AadiPatangi/icecream-streamlit-combo)")
 st.markdown("### **By: Aadi Patangi**")
-image_file = st.file_uploader("Upload an image: ",type=["png","jpg"])
+image_file = st.file_uploader("Upload an image: ",type=["png","jpg","jpeg"])
 
 if image_file:
     #st.markdown('Upload complete!')
